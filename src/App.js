@@ -17,12 +17,14 @@ import React from "react";
 import Button from "@mui/material/Button";
 import Navbar from "./components/Navbar";
 import Trending from "./pages/Trending";
+import AllCoins from "./pages/AllCoins";
 
 export default function App() {
   return (
     <>
       <Navbar />
-      <Trending />
+      {/* <Trending /> */}
+      <AllCoins />
     </>
   );
 }
