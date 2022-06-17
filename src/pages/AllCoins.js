@@ -15,8 +15,8 @@ const AllCoins = () => {
     const [coins,setCoins] = useState([]);
     const [position,setPosition] = useState(8);
 
-    const getAllCoins = () => {
-        fetch('https://api.coingecko.com/api/v3/coins/list')
+    const getAllCoins = async () => {
+        await fetch('https://api.coingecko.com/api/v3/coins/list')
         .then(res => res.json())
         .then(data => setCoins(data))
     }

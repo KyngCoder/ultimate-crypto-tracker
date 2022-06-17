@@ -125,7 +125,7 @@ export default function Navbar() {
             component="div"
             sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
           >
-            <Link to="/popular">Popular</Link>
+            <Link to="/">Popular</Link>
           </Typography>
           <Typography
             variant="h6"
@@ -133,7 +133,7 @@ export default function Navbar() {
             component="div"
             sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
           >
-            <Link to="/popular">Trending</Link>
+            <Link to="/trending">Trending</Link>
           </Typography>
           <Search>
             <SearchIconWrapper>

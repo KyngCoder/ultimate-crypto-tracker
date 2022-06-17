@@ -16,7 +16,8 @@ import Button from "@mui/material/Button";
 import Navbar from "./components/Navbar";
 import Trending from "./pages/Trending";
 import AllCoins from "./pages/AllCoins";
-import { BrowserRouter,Routes,Route } from "react-router-dom";
+import { BrowserRouter,Routes,Route, } from "react-router-dom";
+import Popular from "./pages/Popular";
 
 export default function App() {
   return (
@@ -24,8 +25,10 @@ export default function App() {
     <BrowserRouter>
     <Navbar />
       <Routes>
-        <Route path="/" element={<Trending />} exact />
+        <Route path="/" element={<Popular />} exact />
         <Route path="/allcoins" element={<AllCoins />} exact/>
+        <Route path="/trending" element={<Trending />} exact/>
+        <Route path="*" element={<Popular />} />
       </Routes>
      
     </BrowserRouter>
