@@ -1,16 +1,18 @@
 import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import BasicTable from '../Helpers/Table'
 
 import {
     slice, concat, 
   } from 'lodash';
+import { SearchContext } from '../Helpers/Context';
   
 
 
 
 const AllCoins = () => {
-
+  const {setSearch} = useContext(SearchContext)
+  const [popular, setPopular] = React.useState([]);
     const [showMore,setShowMore] = useState(true);
     const [coins,setCoins] = useState([]);
     const [position,setPosition] = useState(8);
@@ -22,6 +24,7 @@ const AllCoins = () => {
     }
 
     useEffect(() => {
+      setSearch(false)
         getAllCoins();
     },[])
 

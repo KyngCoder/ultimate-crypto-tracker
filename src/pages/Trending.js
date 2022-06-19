@@ -1,10 +1,11 @@
 import { AppBar, Divider, Table, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
-import React, { useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 import BasicTable from '../Helpers/Table';
 import Paper from '@mui/material/Paper';
+import { SearchContext } from '../Helpers/Context';
 
 const Trending = () => {
-
+  const {setSearch} = useContext(SearchContext)
     const [trendingList,setTrendingList] = React.useState([]);
 
     const fetchTrending = async () => {
@@ -14,6 +15,7 @@ const Trending = () => {
     }
 
     useEffect(() => {
+      setSearch(false)
         fetchTrending();
     },[])
 

@@ -1,4 +1,4 @@
-import {React,useState} from "react";
+import { useRef,createContext, React, useContext, useEffect, useState } from "react";
 import { styled, alpha } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -9,7 +9,6 @@ import InputBase from "@mui/material/InputBase";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import { Link } from "react-router-dom";
-
 
 import {
   Drawer,
@@ -26,6 +25,8 @@ import {
   MailOutline,
   ReceiptOutlined,
 } from "@mui/icons-material";
+import SearchComponent from "../pages/SearchComponent";
+import { SearchContext } from "../Helpers/Context";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -72,28 +73,52 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 const data = [
   {
     name: "Trending",
-  
   },
-  { name: "Popular",  },
-  { name: "Coins",  },
-
+  { name: "Popular" },
+  { name: "Coins" },
 ];
-
 
 export default function Navbar() {
   const [searchTerm, setSearchTerm] = useState("");
   const [open, setOpen] = useState(false);
+  const [item, setItem] = useState([]);
+  const {search,setSearch} = useContext(SearchContext);
+
+  const isInputFocussed = useRef(false);
+
+  useEffect(() => {
+    if (document.activeElement === isInputFocussed.current) {
+      console.log('element has focus');
+    } else {
+      console.log('element does NOT have focus');
+    }
+  }, []);
 
   const getList = () => (
-    <div className="w-48"  onClick={() => setOpen(false)}>
+    <div className="w-48" onClick={() => setOpen(false)}>
       {data.map((item, index) => (
-        <ListItem  button key={index}>
+        <ListItem button key={index}>
           <ListItemIcon>{item.icon}</ListItemIcon>
           <ListItemText primary={item.name} />
         </ListItem>
       ))}
     </div>
   );
+
+  const getSearchTerm = () => {
+    fetch(`https://api.coingecko.com/api/v3/search?query=${searchTerm}`)
+      .then((res) => res.json())
+      .then((data) => setItem(data.coins[0]));
+  };
+
+  useEffect(() => {
+    getSearchTerm();
+  }, [searchTerm]);
+
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value)
+    setSearch(!search)
+  }
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -105,7 +130,7 @@ export default function Navbar() {
             color="inherit"
             aria-label="open drawer"
             sx={{ mr: 2 }}
-            onClick={() => setOpen(prev => !prev)}
+            onClick={() => setOpen((prev) => !prev)}
           >
             <MenuIcon />
           </IconButton>
@@ -139,21 +164,36 @@ export default function Navbar() {
             <SearchIconWrapper>
               <SearchIcon />
             </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ "aria-label": "search" }}
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
+
+            <Link to="/search">
+              <StyledInputBase
+                placeholder="Search Coin..."
+                inputProps={{ "aria-label": "search" }}
+                value={searchTerm}
+                onChange={handleSearch}
+              />
+            </Link>
           </Search>
           <div>
-   
-      <Drawer sx={{ height:1/2}} open={open} anchor={"left"} onClose={() => setOpen(false)}>
-        {getList()}
-      </Drawer>
-    </div>
+            <Drawer
+              sx={{ height: 1 / 2 }}
+              open={open}
+              anchor={"left"}
+              onClose={() => setOpen(false)}
+            >
+              {getList()}
+            </Drawer>
+          </div>
         </Toolbar>
       </AppBar>
+      {search && (
+        <SearchComponent
+          name={item.name}
+          symbol={item.symbol}
+          rank={item.market_cap_rank}
+          img={item.large}
+        />
+      )}
     </Box>
   );
 }
