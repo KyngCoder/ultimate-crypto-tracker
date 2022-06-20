@@ -20,8 +20,8 @@ const Trending = () => {
     },[])
 
   return (
-    <div className="flex justify-center m-4">
-        <TableContainer component={Paper}  sx={{ display:'flex', flexDirection:'column', justifyContent:'space-between', width:1/2}}>
+    <div className="flex justify-center  m-4">
+        <TableContainer component={Paper}  sx={{ display:'flex', flexDirection:'column', justifyContent:'center', width:3/4}}>
         <Table aria-label="simple table">
         <TableHead>
           <TableRow>

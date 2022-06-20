@@ -9,7 +9,8 @@ import Typography from "@mui/material/Typography";
 const SearchComponent = ({ img, name, symbol, rank }) => {
   return (
 <div>
-{name && (
+{name?
+(
 <Card sx={{ maxWidth: 350, m: 4 }}>
    
    <CardContent>
@@ -23,13 +24,13 @@ const SearchComponent = ({ img, name, symbol, rank }) => {
      <Typography>{symbol}</Typography>
    </CardActions>
  </Card>
- )
+)
+ : null
 }
 </div>
 
-
+  )
    
-  );
 };
 
 export default SearchComponent;

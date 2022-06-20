@@ -1,4 +1,11 @@
-import { useRef,createContext, React, useContext, useEffect, useState } from "react";
+import {
+  useRef,
+  createContext,
+  React,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { styled, alpha } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -27,6 +34,7 @@ import {
 } from "@mui/icons-material";
 import SearchComponent from "../pages/SearchComponent";
 import { SearchContext } from "../Helpers/Context";
+import { useLayoutEffect } from "react";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -73,52 +81,47 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 const data = [
   {
     name: "Trending",
+    route: "/trending",
   },
-  { name: "Popular" },
-  { name: "Coins" },
+  { name: "Popular", route: "/popular" },
+
+  { name: "Coins", route: "/allcoins" },
 ];
 
 export default function Navbar() {
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState("bitcoin");
   const [open, setOpen] = useState(false);
   const [item, setItem] = useState([]);
-  const {search,setSearch} = useContext(SearchContext);
+  const { search, setSearch } = useContext(SearchContext);
 
-  const isInputFocussed = useRef(false);
 
-  useEffect(() => {
-    if (document.activeElement === isInputFocussed.current) {
-      console.log('element has focus');
-    } else {
-      console.log('element does NOT have focus');
-    }
-  }, []);
 
   const getList = () => (
     <div className="w-48" onClick={() => setOpen(false)}>
       {data.map((item, index) => (
         <ListItem button key={index}>
-          <ListItemIcon>{item.icon}</ListItemIcon>
-          <ListItemText primary={item.name} />
+          <div className="text-center px-4">
+          <Link className=" text-center ml-4" to={item.route}>
+          {item.name}
+          </Link>
+          </div>
         </ListItem>
       ))}
     </div>
   );
 
-  const getSearchTerm = () => {
-    fetch(`https://api.coingecko.com/api/v3/search?query=${searchTerm}`)
-      .then((res) => res.json())
-      .then((data) => setItem(data.coins[0]));
-  };
+  
 
-  useEffect(() => {
-    getSearchTerm();
+  useLayoutEffect(() => {
+    fetch(`https://api.coingecko.com/api/v3/search?query=${searchTerm}`)
+    .then((res) => res.json())
+    .then((data) => setItem(data.coins[0]));
   }, [searchTerm]);
 
   const handleSearch = (e) => {
-    setSearchTerm(e.target.value)
-    setSearch(!search)
-  }
+    setSearchTerm(e.target.value);
+    setSearch(!search);
+  };
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -188,10 +191,10 @@ export default function Navbar() {
       </AppBar>
       {search && (
         <SearchComponent
-          name={item.name}
-          symbol={item.symbol}
-          rank={item.market_cap_rank}
-          img={item.large}
+          name={item?.name}
+          symbol={item?.symbol}
+          rank={item?.market_cap_rank}
+          img={item?.large}
         />
       )}
     </Box>
